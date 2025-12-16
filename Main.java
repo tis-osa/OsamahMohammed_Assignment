@@ -71,7 +71,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Hello, and welcome to my \"STAND AT IT!\" game!");
-        System.out.println("Rules are simple;\nYou and your oppononent have two options: Throw, or Stand.\n >> Throw would allow the player to throw a dice of 20.\n >> Stand would allow the player to not play this round IF they have drawn the round before.\n\nThe game plays in rounds of 5, first person to win 3 rounds wins the entire game.\n\nTo play, both players must draw on the first round, the highest number wins. However, on any other round the players could stand IF they had drawn the last 1-2 rounds.\n\nIf one player stands, the other has to draw to win over the standing player's last draw.\nIf both players stand, each player must draw to win over their own number.\n\nThat's it. Enjoy! And don't forget that you can STAND AT IT.\n==========================");
+        System.out.println("Rules are simple;\nYou and your oppononent have two options: Draw, or Stand.\n >> Draw allows the player to throw a dice of "+MAX_DICE_ROLL+".\n >> Stand would allow the player to not play this round IF they have drawn the round before.\n\nThe game plays in rounds of 5, first person to win 3 rounds wins the game.\n\nTo play, both players must draw on the first round, the highest number wins. However, on any other round the players could stand IF they had ALREADY drawn the round before.\n\nIf one player stands, the other has to draw to win over the standing player's previous draw.\nIf both players stand, each player must draw to win over their own previous draw.\n\nThat's it. Enjoy! And don't forget that you can STAND AT IT.\n==========================");
     
         String pick;
         while (running) { // Choice is given here
@@ -79,10 +79,10 @@ public class Main {
                 resetStat(); // Resetting stand stats
             }
 
-            System.out.println("What do you wish to do?\n>> Draw\n>> Stand\n\nYOU: "+diceYOU+"\nOpponent: "+diceOPPONENT+"\n\nCurrent Round: "+currentRound+"\nRounds Won: "+roundsWon+"\n==========================");
+            System.out.println("What do you wish to do?\n>> Draw\n>> Stand\n\nplayer(YOU)'s Previous Draw: "+diceYOU+"\nOpponent's Previous Draw: "+diceOPPONENT+"\n\nCurrent Round: "+currentRound+"\nRounds Won: "+roundsWon+"\n==========================");
             System.out.print(">> ");
             pick = sc.next();
-            pick.toLowerCase();
+            pick = pick.toLowerCase();
             
             switch (pick) {
                 case "draw":
@@ -120,29 +120,29 @@ public class Main {
                         if (isDiceHigher(diceYOU, prevDiceYOU) == true) { // if player(YOU) can pass YOUR draw
                             if (isDiceHigher(diceOPPONENT, prevDiceOPPONENT) == true) { // if OPPONENT can pass THEIR draw
                                 if (isDiceHigher(diceYOU, diceOPPONENT) == true) { // YOUR CURRENT DRAW VS OPPONENT CURRENT DRAW
-                                    System.out.println("You both stood. And you both passed your draw. But you won! ("+diceYOU+" > "+diceOPPONENT+")");
+                                    System.out.println("You both stood. And you both passed your draw. But you won! (YOU:"+diceYOU+" > OP:"+diceOPPONENT+")");
                                     roundsWon++;
                                 } else {
                                     if (isDiceEqual(diceYOU, diceOPPONENT) == true)
-                                        System.out.println("You both stood. And you both passed your draw. But, no one won! ("+diceYOU+" == "+diceOPPONENT+")");
+                                        System.out.println("You both stood. And you both passed your draw. But, no one won! (YOU:"+diceYOU+" == OP:"+diceOPPONENT+")");
                                     else
-                                        System.out.println("You both stood. And you both passed your draw. But you lost! ("+diceYOU+" > "+diceOPPONENT+")");
+                                        System.out.println("You both stood. And you both passed your draw. But you lost! (YOU:"+diceYOU+" < OP:"+diceOPPONENT+")");
                                 }
 
                             } else { // OPPONENT failed their draw
-                                System.out.println("You both stood. But, he failed his draw! You won! ("+diceOPPONENT+" > "+prevDiceOPPONENT+")");
+                                System.out.println("You both stood. But, he failed his draw! You won! (OP:"+diceOPPONENT+" < OP:"+prevDiceOPPONENT+")");
                                 roundsWon++;
                             }
                         } else // player(YOU) failed draw
-                            System.out.println("You stood. And you failed the draw! ("+diceYOU+" > "+prevDiceYOU+")");
+                            System.out.println("You stood. And you failed the draw! (YOU:"+diceYOU+" < YOU:"+prevDiceYOU+")");
                     } else { // if OPPONENT draws
                         if (isDiceHigher(diceOPPONENT, prevDiceYOU) == true) 
-                            System.out.println("You stood, they didn't. And you lost! ("+diceOPPONENT+" > "+prevDiceYOU+")");
+                            System.out.println("You stood, they didn't. And you lost! (OP:"+diceOPPONENT+" > YOU:"+prevDiceYOU+")");
                         else {
                             if (isDiceEqual(prevDiceYOU, diceOPPONENT) == true)
-                                System.out.println("You stood, they didn't. And no one won! ("+diceOPPONENT+" == "+prevDiceYOU+")");
+                                System.out.println("You stood, they didn't. And no one won! (OP:"+diceOPPONENT+" == YOU:"+prevDiceYOU+")");
                             else {
-                                System.out.println("You stood, they didn't. And you won! ("+diceOPPONENT+" > "+prevDiceYOU+")");
+                                System.out.println("You stood, they didn't. And you won! (OP:"+diceOPPONENT+" < YOU:"+prevDiceYOU+")");
                                 roundsWon++;
                             }
                         }
@@ -150,13 +150,13 @@ public class Main {
                     }
                 } else { // If player(YOU) draw
                     if (isDiceHigher(diceYOU, diceOPPONENT) == true) { // player(YOU) vs OPPONENT
-                        System.out.println("You both drew. And you won! ("+diceYOU+" > "+diceOPPONENT+")");
+                        System.out.println("You both drew. And you won! (YOU:"+diceYOU+" > OP:"+diceOPPONENT+")");
                         roundsWon++;
                     } else {
                         if (isDiceEqual(diceYOU, diceOPPONENT) == true) // CHECKING IF EQUAL
-                            System.out.println("You both drew. And no one won! ("+diceYOU+" == "+diceOPPONENT+")");
+                            System.out.println("You both drew. And no one won! (YOU:"+diceYOU+" == OP:"+diceOPPONENT+")");
                         else // player(YOU) LOST
-                            System.out.println("You both drew. And you lost! ("+diceYOU+" > "+diceOPPONENT+")");
+                            System.out.println("You both drew. And you lost! (YOU:"+diceYOU+" < OP:"+diceOPPONENT+")");
                     }
                 }
 
